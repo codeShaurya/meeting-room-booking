@@ -9,6 +9,7 @@ class Errors {
             6 : "Floor with this name doest  not exist",
             7 : "Room with this name doest  not exist",
             8 : "Slot not avaiable",
+            9 : "Given Slot not avaiable in provided location",
         }
     }
 

@@ -49,6 +49,16 @@ class Building {
         return floor.bookSlot(roomName, slot); 
     }
 
+    cancelSlot(floorName, roomName, slot) {
+        let res = this.getFloorByName(floorName);
+        if(!res['success']) {
+            return res;
+        }
+
+        let floor = res['data'];
+        return floor.cancelSlot(roomName, slot); 
+    }
+
     getFloorByName(name) {
         let floor = this.floors[name];
         if(floor === undefined) {

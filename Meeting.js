@@ -58,6 +58,20 @@ class Meeting {
         return building.bookSlot(floorName, roomName, slot);
     }
 
+    cancelSlot(buildingName, floorName, roomName, slot) {
+        let res = this.getBuildingByName(buildingName);
+        if(!res['success']) {
+            return res;
+        }
+
+        let building = res['data'];
+        return building.cancelSlot(floorName, roomName, slot);
+    }
+
+    getAllBooking(buildingName, floorName) {
+
+    }
+
     getBuildingByName(name) {
         let building = this.buildings[name];
         if(building === undefined) {
