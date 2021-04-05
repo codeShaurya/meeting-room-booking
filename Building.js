@@ -1,7 +1,5 @@
-var Floor = require('./Floor').Floor;
-var Errors = require('./Errors').Errors;
-
-var error = new Errors();
+var { Floor } = require('./Floor');
+const { GET_FLOOR, ADD_FLOOR, GET_FLOOR_COUNT, ERROR } = require('./constant');
 
 class Building {
     constructor(name) {
@@ -9,11 +7,39 @@ class Building {
         this.floors = {}
     }
 
+    dispatch(action) {
+        const {type, payload} = action;
+
+        switch(type) {
+            case ADD_FLOOR: {
+                return this.addFloor(payload.floorName);
+            }
+
+            case GET_FLOOR: {
+                return this.getFloorByName(payload.floorName);
+            }
+
+            case GET_FLOOR_COUNT: {
+
+            }
+
+            default: {
+                let res = this.getFloorByName(payload.floorName);
+                if(!res['success']) {
+                    return res;
+                }
+
+                let floor = res['data'];
+                return floor.dispatch(action); 
+            }
+        }
+    }
+
     addFloor(floorName) {
         if(this.floors[floorName] !== undefined) {
             return {
                 success: false,
-                error: error.getError(3),
+                error: ERROR.getError(3),
             }
         }
 
@@ -29,42 +55,12 @@ class Building {
         }
     }
 
-    addRoom(floorName, roomName) {
-        let res = this.getFloorByName(floorName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let floor = res['data'];
-        return floor.addRoom(roomName);   
-    }
-
-    bookSlot(floorName, roomName, slot) {
-        let res = this.getFloorByName(floorName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let floor = res['data'];
-        return floor.bookSlot(roomName, slot); 
-    }
-
-    cancelSlot(floorName, roomName, slot) {
-        let res = this.getFloorByName(floorName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let floor = res['data'];
-        return floor.cancelSlot(roomName, slot); 
-    }
-
     getFloorByName(name) {
         let floor = this.floors[name];
         if(floor === undefined) {
             return {
                 success: false,
-                error:  error.getError(6)
+                error:  ERROR.getError(6)
             }
         }
 

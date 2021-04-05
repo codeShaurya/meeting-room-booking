@@ -1,0 +1,17 @@
+
+const { Errors } = require('./Errors');
+
+module.exports = {
+    ADD_BUILDING: "ADD_BUILDING",
+    GET_BUILDING: "GET_BUILDING",
+    GET_BUILDING_COUNT: "GET_BUILDING_COUNT",
+    ADD_FLOOR: "ADD_FLOOR",
+    GET_FLOOR: "GET_FLOOR",
+    GET_FLOOR_COUNT: "GET_FLOOR_COUNT",
+    ADD_ROOM: "ADD_ROOM",
+    GET_ROOM: "GET_ROOM",
+    GET_ROOM_COUNT: "GET_ROOM_COUNT",
+    BOOK_SLOT: "BOOK_SLOT",
+    CANCEL_SLOT: "CANCEL_SLOT",
+    ERROR: new Errors(),
+}

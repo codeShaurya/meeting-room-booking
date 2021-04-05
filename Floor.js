@@ -1,8 +1,6 @@
 
-var Errors = require('./Errors').Errors;
-var Room = require('./Room').Room;
-
-var error = new Errors();
+var { Room } = require('./Room');
+const { GET_ROOM, ADD_ROOM, ERROR } = require('./constant');
 
 class Floor {
     constructor(name) {
@@ -10,11 +8,34 @@ class Floor {
         this.rooms = {}
     }
 
+    dispatch(action) {
+        const { type, payload } = action;
+        switch(type) {
+            case ADD_ROOM: {
+                return this.addRoom(payload.roomName);
+            }
+
+            case GET_ROOM: {
+                return this.getRoomByName(payload.roomName);
+            }
+
+            default: {
+                let res = this.getRoomByName(payload.roomName);
+                if(!res['success']) {
+                    return res;
+                }
+
+                let room = res['data'];
+                return room.dispatch(action);
+            }
+        }
+    }
+
     addRoom(roomName) {
         if(this.rooms[roomName] !== undefined) {
             return {
                 success: false,
-                error: error.getError(4),
+                error: ERROR.getError(4),
             }
         }
         
@@ -31,32 +52,12 @@ class Floor {
         }
     }
 
-    bookSlot(roomName, slot) {
-        let res = this.getRoomByName(roomName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let room = res['data'];
-        return room.bookSlot(slot);
-    }
-
-    cancelSlot(roomName, slot)  {
-        let res = this.getRoomByName(roomName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let room = res['data'];
-        return room.cancelSlot(slot);
-    }
-
     getRoomByName(name) {
         let room = this.rooms[name];
         if(room === undefined) {
             return {
                 success: false,
-                error:  error.getError(6)
+                error:  ERROR.getError(6)
             }
         }
 

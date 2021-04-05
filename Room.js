@@ -1,13 +1,29 @@
 
-const Slot = require('./Slot').Slot;
-const Errors = require('./Errors').Errors;
-
-var error = new Errors();
+const { Slot } = require('./Slot');
+const { BOOK_SLOT, CANCEL_SLOT, ERROR } = require('./constant');
 
 class Room {
     constructor(roomName) {
         this.name = roomName
         this.slot = [];
+    }
+
+    dispatch(action) {
+        const {type, payload} = action;
+
+        switch(type) {
+            case BOOK_SLOT: {
+                return this.bookSlot(payload.slotToBe);
+            }
+
+            case CANCEL_SLOT: {
+                return this.cancelSlot(payload.slotToBe);
+            }
+
+            default: {
+
+            }
+        }
     }
 
     bookSlot(slotToBe) {
@@ -23,7 +39,7 @@ class Room {
         if(!isFree) {
             return {
                 success: false,
-                error: error.getError(8),
+                error: ERROR.getError(8),
             }
         }
 
@@ -45,7 +61,7 @@ class Room {
         if(index === -1) {
             return {
                 success: false,
-                error: error.getError(9),
+                error: ERROR.getError(9),
             }
         }
         

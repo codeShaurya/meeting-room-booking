@@ -1,18 +1,45 @@
-const Building = require('./Building').Building;
-const Errors = require('./Errors').Errors;
-
-const error = new Errors();
+const { Building } = require('./Building');
+const { ADD_BUILDING, GET_BUILDING, GET_BUILDING_COUNT, ERROR } = require('./constant');
 
 class Meeting {    
     constructor() {
         this.buildings = {};
     }
 
+    dispatch(action) {
+        const {type, payload} = action;
+
+        switch(type) {
+            case ADD_BUILDING: {
+                return this.addBuilding(payload.buildingName);
+            }
+
+            case GET_BUILDING_COUNT: {
+                return this.getBuildingCount();
+            }
+
+            case GET_BUILDING: {
+                return this.getBuildingByName(payload.buildingName);
+            }
+
+            default: {
+                let res = this.getBuildingByName(payload.buildingName);
+                if(!res['success']) {
+                    return res;
+                }
+
+                let building = res['data'];        
+                return building.dispatch(action);
+            }
+        }
+
+    }
+
     addBuilding(name) {
         if(this.buildings[name] !== undefined) {
             return {
                 success: false,
-                error:  error.getError(2)
+                error:  ERROR.getError(2)
             }
         }
  
@@ -28,56 +55,12 @@ class Meeting {
         };
     }
 
-    addFloor(buildingName, floorName) {
-        let res = this.getBuildingByName(buildingName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let building = res['data'];        
-        return building.addFloor(floorName);
-    }
-
-    addRoom(buildingName, floorName, roomName) {
-        let res = this.getBuildingByName(buildingName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let building = res['data'];
-        return building.addRoom(floorName, roomName);
-    }
-
-    bookSlot(buildingName, floorName, roomName, slot) {
-        let res = this.getBuildingByName(buildingName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let building = res['data'];
-        return building.bookSlot(floorName, roomName, slot);
-    }
-
-    cancelSlot(buildingName, floorName, roomName, slot) {
-        let res = this.getBuildingByName(buildingName);
-        if(!res['success']) {
-            return res;
-        }
-
-        let building = res['data'];
-        return building.cancelSlot(floorName, roomName, slot);
-    }
-
-    getAllBooking(buildingName, floorName) {
-
-    }
-
     getBuildingByName(name) {
         let building = this.buildings[name];
         if(building === undefined) {
             return {
                 success: false,
-                error:  error.getError(5)
+                error:  ERROR.getError(5)
             }
         }
 
@@ -87,7 +70,7 @@ class Meeting {
         }
     }
 
-    getNumberOfBuilding() {
+    getBuildingCount() {
         return {
             success: true,
             data: Object.keys(this.buildings).length,

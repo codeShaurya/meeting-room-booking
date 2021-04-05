@@ -1,47 +1,197 @@
-var Meeting = require('./Meeting').Meeting;
-var log = require('./helper').log;
+var { Meeting } = require('./Meeting');
+var { log } = require('./helper');
+const { 
+    ADD_BUILDING,
+    ADD_FLOOR,
+    ADD_ROOM,
+    BOOK_SLOT,
+    CANCEL_SLOT,
+    } = require('./constant');
 
 var meeting = new Meeting();
 let res;
 
-//adding buidling flipkart1
-res = meeting.addBuilding("flipkart1");
+res = meeting.dispatch({
+    type: ADD_BUILDING,
+    payload: {
+        buildingName:"b1"
+    }
+});
 log(res);
 
-//adding floor floor1, in buidling flipkart1
-res = meeting.addFloor("flipkart1", "floor1");
+res = meeting.dispatch({
+    type: ADD_BUILDING,
+    payload: {
+        buildingName:"b2"
+    }
+});
+
 log(res);
 
-//adding room room1, on floor1, in buidling flipkart1
-res = meeting.addRoom("flipkart1", "floor1", "room1");
+res = meeting.dispatch({
+    type: ADD_FLOOR,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1"
+    }
+});
 log(res);
 
-//adding room room2, on floor2, in buidling flipkart1
-res = meeting.addRoom("flipkart1", "floor1", "room2");
+res = meeting.dispatch({
+    type: ADD_FLOOR,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1"
+    }
+});
 log(res);
 
-//booking room room1, on floor1, in buidling flipkart1
-res = meeting.bookSlot("flipkart1", "floor1", "room1", {start: 10, end: 4});
+res = meeting.dispatch({
+    type: ADD_FLOOR,
+    payload: {
+        buildingName: "b",
+        floorName: "f1"
+    }
+});
 log(res);
 
-//booking room room1, on floor1, in buidling flipkart1
-res = meeting.bookSlot("flipkart1", "floor1", "room1", {start: 10, end: 12});
+
+res = meeting.dispatch({
+    type: ADD_ROOM,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+    }
+});
 log(res);
 
-//booking room room1, on floor1, in buidling flipkart1
-res = meeting.bookSlot("flipkart1", "floor1", "room1", {start: 5, end: 7});
+res = meeting.dispatch({
+    type: ADD_ROOM,
+    payload: {
+        buildingName: "b1",
+        floorName: "f2",
+        roomName: "r1",
+    }
+});
 log(res);
 
-//cancelling booked room room1, on floor1, in buidling flipkart1
-res = meeting.cancelSlot("flipkart1", "floor1", "room1", {start: 5, end: 7});
+res = meeting.dispatch({
+    type: ADD_ROOM,
+    payload: {
+        buildingName: "b3",
+        floorName: "f2",
+        roomName: "r1",
+    }
+});
 log(res);
 
-//cancelling booked room room1, on floor1, in buidling flipkart1
-res = meeting.cancelSlot("flipkart1", "floor1", "room1", {start: 5, end: 9});
+res = meeting.dispatch({
+    type: ADD_ROOM,
+    payload: {
+        buildingName: "b1",
+        floorName: "f6",
+        roomName: "r1",
+    }
+});
 log(res);
 
-//get all booking on floor1, in buidling flipkart1
-res = meeting.getAllBooking("flipkart1", "floor1");
+res = meeting.dispatch({
+    type: ADD_ROOM,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 10, end: 4}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 10, end: 12}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 5, end: 7}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b4",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 5, end: 7}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f4",
+        roomName: "r1",
+        slotToBe: {start: 5, end: 7}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: BOOK_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r6",
+        slotToBe: {start: 5, end: 7}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: CANCEL_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 10, end: 4}
+    }
+});
+log(res);
+
+res = meeting.dispatch({
+    type: CANCEL_SLOT,
+    payload: {
+        buildingName: "b1",
+        floorName: "f1",
+        roomName: "r1",
+        slotToBe: {start: 10, end: 9}
+    }
+});
 log(res);
 
 console.log(JSON.stringify(meeting));
