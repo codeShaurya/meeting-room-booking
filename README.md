@@ -1,2 +1,7 @@
-# meeting-room-booking
-Meeting room booking program in JS and OOPS
+# Meeting Room Booking
+
+## Problem Statement
+
+## Requirements
+
+## Solution
